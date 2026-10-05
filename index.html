@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fjodor M. Dostojewski – Poetik, Tragödie und Existenzialismus</title>
+  <style>
+    :root {
+      --bg-dark: #121316;
+      --card-bg: #1b1d22;
+      --card-border: #2e323b;
+      --text-main: #e8e6e3;
+      --text-muted: #a0a5b0;
+      --accent-gold: #d4af37;
+      --accent-red: #c0392b;
+      --accent-cyan: #4db6ac;
+      --font-serif: 'Georgia', 'Palatino Linotype', 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Bar */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 30px;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(18, 19, 22, 0.95);
+      z-index: 100;
+    }
+
+    .brand {
+      font-size: 0.95rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent-gold);
+      font-family: var(--font-serif);
+      font-weight: 600;
+    }
+
+    .controls-hint {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .controls-hint kbd {
+      background: #2a2d35;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid #3c404b;
+      color: var(--text-main);
+      font-size: 0.75rem;
+    }
+
+    /* Main Slide Container */
+    #deck {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .slide {
+      position: absolute;
+      width: 90%;
+      max-width: 1080px;
+      min-height: 580px;
+      max-height: 85vh;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 48px 56px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px) scale(0.98);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Slide Typography */
+    .slide-badge {
+      display: inline-block;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent-gold);
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .slide-title {
+      font-family: var(--font-serif);
+      font-size: 2.2rem;
+      color: #fff;
+      margin-bottom: 20px;
+      line-height: 1.25;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+      padding-bottom: 14px;
+    }
+
+    .slide-subtitle {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+      font-style: italic;
+    }
+
+    .slide-content {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--text-main);
+      flex: 1;
+    }
+
+    /* Grid Layout for Cards inside Slide */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 10px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 18px;
+      margin-top: 10px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .card h4 {
+      font-family: var(--font-serif);
+      color: var(--accent-gold);
+      font-size: 1.15rem;
+      margin-bottom: 10px;
+    }
+
+    .card p, .card ul {
+      font-size: 0.95rem;
+      color: #cfd3dc;
+      line-height: 1.6;
+    }
+
+    .card ul {
+      padding-left: 20px;
+    }
+
+    .card li {
+      margin-bottom: 6px;
+    }
+
+    /* Source Citation Badge */
+    .source-tag {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: 0.8rem;
+      color: #798294;
+      border-top: 1px dashed #303540;
+      padding-top: 8px;
+      width: 100%;
+    }
+
+    .source-tag strong {
+      color: var(--accent-cyan);
+    }
+
+    /* Quote Box */
+    .quote-box {
+      border-left: 3px solid var(--accent-gold);
+      padding: 16px 22px;
+      background: rgba(212, 175, 55, 0.05);
+      font-style: italic;
+      margin: 18px 0;
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .quote-author {
+      text-align: right;
+      font-size: 0.88rem;
+      font-style: normal;
+      color: var(--accent-gold);
+      margin-top: 6px;
+    }
+
+    /* Speaker Notes Box */
+    .speaker-notes {
+      display: none;
+      background: #14161a;
+      border: 1px dashed #444b58;
+      border-radius: 6px;
+      padding: 14px 18px;
+      margin-top: 20px;
+      font-size: 0.88rem;
+      color: #b8bdc8;
+      line-height: 1.5;
+    }
+
+    .speaker-notes.visible {
+      display: block;
+    }
+
+    .speaker-notes strong {
+      color: #ffb74d;
+    }
+
+    /* Footer & Navigation */
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 30px;
+      background: rgba(18, 19, 22, 0.95);
+      border-top: 1px solid var(--card-border);
+      z-index: 100;
+    }
+
+    .progress-bar-container {
+      flex: 1;
+      max-width: 400px;
+      height: 4px;
+      background: #23262f;
+      border-radius: 2px;
+      overflow: hidden;
+      margin: 0 20px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--accent-gold);
+      width: 10%;
+      transition: width 0.3s ease;
+    }
+
+    .nav-btn {
+      background: #262932;
+      border: 1px solid #3c404c;
+      color: var(--text-main);
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      background: var(--accent-gold);
+      color: #121316;
+      border-color: var(--accent-gold);
+    }
+
+    .slide-counter {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Title Slide Specifics */
+    .title-slide {
+      text-align: center;
+      justify-content: center;
+      padding: 60px 40px;
+    }
+
+    .title-slide .slide-title {
+      font-size: 3rem;
+      border: none;
+      margin-bottom: 12px;
+    }
+
+    .title-slide .slide-subtitle {
+      font-size: 1.35rem;
+      color: var(--accent-gold);
+      margin-bottom: 24px;
+    }
+
+    .title-meta {
+      margin-top: 30px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">LITERATURWISSENSCHAFT & PHILOSOPHIE</div>
+    <div class="controls-hint">
+      Navigation: <kbd>&larr;</kbd> <kbd>&rarr;</kbd> oder <kbd>Leertaste</kbd> | Notizen: <kbd>N</kbd>
+    </div>
+  </header>
+
+  <main id="deck">
+
+    <!-- SLIDE 1: Title -->
+    <div class="slide active title-slide">
+      <div>
+        <span class="slide-badge">Monografie & Forschungsbericht</span>
+        <h1 class="slide-title">Fjodor M. Dostojewski</h1>
+        <div class="slide-subtitle">Poetik des Romans, Philosophie der Tragödie & der unruhige Geist</div>
+        <p style="max-width: 680px; margin: 0 auto; color: #b0b5c0; font-size: 1.05rem; line-height: 1.7;">
+          Eine systematische Rekonstruktion basierend auf den digitalisierten literaturwissenschaftlichen Standardwerken aus dem Korpus von <em>djvu.online</em> (Leonid Grossman, Lev Shestov, A.S. Dolinin & Briefwechsel).
+        </p>
+        <div class="title-meta">
+          Themenschwerpunkte: Polyphonie • Existenzialismus • Kriminalsujet & Metaphysik • Religiöser Zweifel
+        </div>
+      </div>
+      <div class="speaker-notes">
+        <strong>Vortragsnotiz:</strong> Begrüßung des Publikums. Ziel der Präsentation ist es, Dostojewski nicht nur als Romancier darzustellen, sondern das Zusammenspiel von literarischer Form (Grossman) und existenzieller Philosophie (Shestov) zu beleuchten.
+      </div>
+    </div>
+
+    <!-- SLIDE 2: Die Zäsur von 1849 -->
+    <div class="slide">
+      <div>
+        <span class="slide-badge">Kapitel 1: Der biographische Wendepunkt</span>
+        <h2 class="slide-title">Die Zäsur von 1849: Vom Idealismus zur Katorga</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h4>Die Scheinhinrichtung</h4>
+            <p>Am 22. Dezember 1849 stand Dostojewski auf dem Semjonow-Platz vor dem Erschießungskommando. Im letzten Moment traf die zaristische Begnadigung ein.</p>
+            <ul>
+              <li><strong>Psychologische Folge:</strong> Das Bewusstsein des Menschen, der dem sicheren Tod ins Auge sieht (später zentral in Fürst Myschkins Monolog in <em>Der Idiot</em>).</li>
+              <li><strong>Erschütterung:</strong> Zerfall abstrakter philosophischer Theorien angesichts existentieller Realität.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>Sibirien & die Katorga (Omsk)</h4>
+            <p>Vier Jahre Zwangsarbeit unter Schwerverbrechern, gefolgt von Verbannung als einfacher Soldat.</p>
+            <ul>
+              <li><strong>Erkenntnis:</strong> Die Begegnung mit dem ungeschminkten russischen Volk – Zerschlagung der naiven bürgerlich-romantischen Utopien (Belinski-Kreis).</li>
+              <li><strong>Das einzige Buch:</strong> Das Neue Testament als einzige zugelassene Lektüre in den Katorga-Jahren.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="source-tag">
+          <strong>Referenzwerk auf djvu.online:</strong> Lev Shestov: <em>Достоевский и Ницше (Философия трагедии)</em> [Dostojewski und Nietzsche – Die Philosophie der Tragödie], St. Petersburg.
+        </div>
+      </div>
+      <div class="speaker-notes">
+        <strong>Vortragsnotiz:</strong> Hebe hervor, wie Shestov diesen Moment als die Geburtsstunde von Dostojewskis Philosophie der Tragödie beschreibt: Der naive Humanismus der 1840er Jahre starb auf dem Schafott und in Omsk.
+      </div>
+    </div>
+
+    <!-- SLIDE 3: Aufzeichnungen aus dem Untergrund -->
+    <div class="slide">
+      <div>
+        <span class="slide-badge">Kapitel 2: Der philosophische Durchbruch (1864)</span>
+        <h2 class="slide-title">Der Untergrund: Aufstand gegen den Rationalismus</h2>
+        <div class="quote-box">
+          „Zwei mal zwei ist vier ist gewiss eine sehr hübsche Sache; aber wenn wir schon einmal beim Loben sind: zwei mal zwei ist fünf ist manchmal auch ein allerliebstes Dingelchen.“
+          <div class="quote-author">— Dostojewski: <em>Aufzeichnungen aus dem Kellerloch (Записки из подполья)</em></div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <h4>Kritik am Kristallpalast</h4>
+            <p>Angriff auf Tshernyschewskis rationalen Egoismus und den utilitaristischen Glauben, dass Wissenschaft und Logik den Menschen determinieren und harmonisieren können.</p>
+          </div>
+          <div class="card">
+            <h4>Freiheit vs. Kausalität</h4>
+            <p>Der Mensch beansprucht das Recht, irrational zu handeln – selbst gegen den eigenen Vorteil –, nur um zu beweisen, dass er ein Mensch und kein „Klavierstift“ ist.</p>
+          </div>
+        </div>
+        <div class="source-tag">
+          <strong>Textbefund:</strong> Shestov interpretiert diesen Text als die radikalste Abrechnung mit dem europäischen Positivismus vor Friedrich Nietzsche.
+        </div>
+      </div>
+      <div class="speaker-notes">
+        <strong>Vortragsnotiz:</strong> Dies ist die philosophische Ouvertüre zu allen vier großen Meisterromanen. Ohne den Untergrundmann versteht man weder Raskolnikow noch Iwan Karamasow.
+      </div>
+    </div>
+
+    <!-- SLIDE 4: Grossmans Poetik des Romans -->
+    <div class="slide">
+      <div>
+        <span class="slide-badge">Kapitel 3: Literaturtheorie & Romanstruktur</span>
+        <h2 class="slide-title">Leonid Grossman: Die Poetik des Abenteuerromans</h2>
+        <div class="slide-subtitle">Wie Dostojewski Trivialroman-Muster mit Metaphysik verschmolz</div>
+        <div class="grid-3">
+          <div class="card">
+            <h4>Das Sensations-Sujet</h4>
+            <p>Dostojewski nutzte Techniken der französischen Kolportage- und Kriminalromane (Mord, Erpressung, Verschwörung, plötzliche Erbschaften, Skandale).</p>
+          </div>
+          <div class="card">
+            <h4>Der platonische Dialog</h4>
+            <p>Mitten in diesen atemlosen Plot setzt er gewaltige metaphysische Debatten über Gott, Gerechtigkeit, Sittlichkeit und Unsterblichkeit.</p>
+          </div>
+          <div class="card">
+            <h4>Stilistische Polarität</h4>
+            <p>Synthese des Vulgären und des Sakralen: Kakerlakenhafte Dachkammern und billige Schenken treffen auf biblische Offenbarungen.</p>
+          </div>
+        </div>
+        <div class="source-tag">
+          <strong>Referenzwerk auf djvu.online:</strong> Leonid Grossman: <em>Поэтика Достоевского</em> [Die Poetik Dostojewskis], Moskau 1925 (Kapitel: „Композиция в романе Достоевского“).
+        </div>
+      </div>
+      <div class="speaker-notes">
+        <strong>Vortragsnotiz:</strong> Grossman zeigte als Erster systematisch, dass Dostojewskis Romane nicht „formlos“ waren (wie oft von zeitgenössischen Kritikern behauptet), sondern eine hochgradig durchdachte Gegenüberstellung von Kolportage-Spannung und Tiefenphilosophie darstellen.
+      </div>
+    </div>
+
+    <!-- SLIDE 5: Polyphonie -->
+    <div class="slide">
+      <div>
+        <span class="slide-badge">Kapitel 4: Das Konzept der Polyphonie</span>
+        <h2 class="slide-title">Der polyphone Roman: Stimmen im Widerstreit</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h4>Der monologische Roman (Tolstoi)</h4>
+            <p>Der Autor weiß alles, richtet über seine Figuren und formuliert die oberste sittliche Wahrheit aus einer übergeordneten Perspektive.</p>
+            <p style="margin-top:10px; color:#a0a5b0;"><em>Figur = Sprachrohr oder Anschauungsobjekt des Autors.</em></p>
+          </div>
+          <div class="card" style="border-color: var(--accent-gold);">
+            <h4>Der polyphone Roman (Dostojewski)</h4>
+            <p>Jede Hauptfigur besitzt eine vollwertige, eigenständige Weltanschauung. Der Autor argumentiert <em>mit</em> den Figuren, statt sie von oben herab zu belehren.</p>
+            <p style="margin-top:10px; color:#d4af37;"><em>Figur = Gleichberechtigtes Bewusstsein; unauflösbare Dialoge.</em></p>
+          </div>
+        </div>
+        <div class="quote-box" style="margin-top: 20px;">
+          „Die Idee wird bei Dostojewski zur lebendigen Kraft, die einen Menschen ergreift, quält und transformiert.“
+          <div class="quote-author">— Michail Bachtin / A.S. Dolinin (Sammelbände auf <em>djvu.online</em>)</div>
+        </div>
+      </div>
+      <div class="speaker-notes">
+        <strong>Vortragsnotiz:</strong> Erkläre, warum selbst atheistische Argumente bei Dostojewski (wie Iwans Kritik an der Theodizee) so scharf formuliert sind, dass kaum ein Gläubiger sie besser formulieren könnte. Dostojewski bekämpfte den Zweifel, indem er ihm die stärkste Stimme gab.
+      </div>
+    </div>
+
+    <!-- SLIDE 6: Schuld und Sühne & Die Dämonen -->
+    <div class="slide">
+      <div>
+        <span class="slide-badge">Kapitel 5: Die Hybris des Intellekts</span>
+        <h2 class="slide-title">Ideen als Dämonen: Verbrechen und Ideologie</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h4>Schuld und Sühne (1866)</h4>
+            <p><strong>Raskolnikows Theorie:</strong> Die Menschheit teilt sich in „Gewöhnliche“ (Material) und „Ungewöhnliche“ (Napoleons), die das Recht haben, Grenzen zu überschreiten.</p>
+            <ul style="margin-top:10px;">
+              <li>Der Mord als theoretisches Experiment.</li>
+              <li>Das Scheitern: Das menschliche Gewissen lässt sich nicht rational ausschalten; seelische Isolation erfordert Sühne.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>Die Dämonen (1871/72)</h4>
+            <p><strong>Die prophetische Warnung:</strong> Analyse des revolutionären Nihilismus anhand des Nechajew-Falls (Schigajow-System).</p>
+            <ul style="margin-top:10px;">
+              <li>„Ausgehend von unbeschränkter Freiheit gelange ich zur unbeschränkten Despotie.“</li>
+              <li>Zerstörung von Bindung und Gewissen zugunsten utopischer Kollektivierung.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="source-tag">
+          <strong>Referenzwerk auf djvu.online:</strong> F.M. Dostojewski: <em>Статьи и материалы под ред. А.С. Долинина</em> [Aufsätze und Materialien zur Romanentstehung].
+        </div>
+      </div>
+      <div class="speaker-notes">
+        <strong>Vortragsnotiz:</strong> Beide Romane untersuchen, was passiert, wenn abstrakte Ideologien („Alles ist erlaubt“) in die Tat umgesetzt werden. Das 20. Jahrhundert bestätigte Dostojewskis Diagnose mit erschütternder Präzision.
+      </div>
+    </div>
+
+    <!-- SLIDE 7: Der Idiot -->
+    <div class="slide">
+      <div>
+        <span class="slide-badge">Kapitel 6: Das Schöne und das Leiden</span>
+        <h2 class="slide-title">Der Idiot (1868): Die Tragödie des vollkommenen Menschen</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h4>Prinz Myschkin („Christus-Gestalt“)</h4>
+            <p>Das Experiment, einen ausnahmslos gütigen, aufrichtigen Menschen in die Petersburger Salon- und Adelsgesellschaft zu versetzen.</p>
+            <ul>
+              <li>Myschkins bedingungslose Empathie heilt niemanden dauerhaft, sondern entlarvt die Heuchelei aller Umstehenden.</li>
+              <li>Am Ende siegen Wahnsinn, Leidenschaft (Rogoschin) und Tragödie (Nastassja Filippowna).</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>Das Bild des toten Christus</h4>
+            <p>Hans Holbein d. J.: <em>Der Leichnam Christi im Grabe</em>.</p>
+            <p style="margin-top:10px;">„Von diesem Bilde kann mancher noch den Glauben verlieren!“ – Fürst Myschkin.</p>
+            <p style="margin-top:10px; color:#a0a5b0;">Die Natur als blinde, erbarmungslose Maschine, die selbst das Heiligste zermalmt. Die Schönheit rettet die Welt – aber wie rettet man die Schönheit?</p>
+          </div>
+        </div>
+      </div>
+      <div class="speaker-notes">
+        <strong>Vortragsnotiz:</strong> Dies ist Dostojewskis vielleicht melancholischster Roman. Hier zeigt sich die radikale Offenheit seiner Kunst: Er liefert kein billiges Happy End, sondern stellt die Frage nach der Haltbarkeit christlicher Nächstenliebe in einer materiellen Welt.
+      </div>
+    </div>
+
+    <!-- SLIDE 8: Die Brüder Karamasow -->
+    <div class="slide">
+      <div>
+        <span class="slide-badge">Kapitel 7: Das theologische Meisterwerk</span>
+        <h2 class="slide-title">Die Brüder Karamasow (1880): Theodizee & Großinquisitor</h2>
+        <div class="grid-3">
+          <div class="card">
+            <h4>Dmitri (Die Leidenschaft)</h4>
+            <p>Verkörperung des Karamasowschen Urdrangs: Unbändige Sinnlichkeit, Ehre und die Sehnsucht nach Erlösung durch Leiden.</p>
+          </div>
+          <div class="card" style="border-color: var(--accent-red);">
+            <h4>Iwan (Der Zweifel)</h4>
+            <p>Rebellion gegen Gottes Schöpfung wegen des Leidens unschuldiger Kinder. Er gibt „die Eintrittskarte zurück“.</p>
+          </div>
+          <div class="card" style="border-color: var(--accent-gold);">
+            <h4>Aljoscha (Die aktive Liebe)</h4>
+            <p>Der Schüler des Starez Sossima: Keine theoretischen Antworten, sondern gelebte Barmherzigkeit und Versöhnung.</p>
+          </div>
+        </div>
+        <div class="quote-box" style="margin-top: 18px;">
+          <strong>Die Legende vom Großinquisitor:</strong> Christus kehrt im 16. Jahrhundert nach Sevilla zurück. Der Großinquisitor lässt ihn verhaften und erklärt: Die Menschen wollen keine Freiheit des Geistes – sie wollen Brot, Autorität und das Wunder.
+        </div>
+      </div>
+      <div class="speaker-notes">
+        <strong>Vortragsnotiz:</strong> Die Legende vom Großinquisitor ist das philosophische Kernstück. Christus antwortet dem Inquisitor mit keinem einzigen Argument, sondern küsst den greisen Kardinal auf die blutleeren Lippen.
+      </div>
+    </div>
+
+    <!-- SLIDE 9: Der Mensch hinter dem Werk -->
+    <div class="slide">
+      <div>
+        <span class="slide-badge">Kapitel 8: Biographie & Arbeitsbedingungen</span>
+        <h2 class="slide-title">Leben im Ausnahmezustand: Die Briefe & Anna Grigorjewna</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h4>Arbeiten am Abgrund</h4>
+            <ul>
+              <li><strong>Epilepsie:</strong> Anfälle, die sein Gedächtnis schwächten, ihm aber visionäre Zustände vor dem Anfall schenkten.</li>
+              <li><strong>Schulden & Roulettenburg:</strong> Verzweifelte Versuche, in Wiesbaden und Homburg Geld zu erspielen; ständige Flucht vor Gläubigern.</li>
+              <li><strong>Zeitdruck:</strong> <em>Der Spieler</em> wurde in 26 Tagen diktiert, um eine existenzbedrohende Verlagsklausel abzuwenden.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>Anna Grigorjewna Snitkina</h4>
+            <p>Stenografin, Ehefrau und erste weibliche Verlagsmanagerin Russlands.</p>
+            <ul>
+              <li>Schuf die wirtschaftliche Stabilität für die Vollendung der Spätwerke.</li>
+              <li>Verwaltung der Finanzen, Drucklegung und Schutz vor Ausbeutung durch skrupellose Verleger.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="source-tag">
+          <strong>Referenzwerk auf djvu.online:</strong> <em>Достоевский Ф.М., Достоевская А.Г. Переписка</em> [Briefwechsel Dostojewski & Dostoewskaja, hrsg. von S.W. Belov / W.A. Tunimanow].
+        </div>
+      </div>
+      <div class="speaker-notes">
+        <strong>Vortragsnotiz:</strong> Diese Briefe offenbaren einen zutiefst menschlichen, oft verzweifelten Dostojewski. Sie widerlegen die Legende vom unnahbaren Propheten und zeigen einen Arbeiter des Geistes im täglichen Kampf um das Überleben seiner Familie.
+      </div>
+    </div>
+
+    <!-- SLIDE 10: Vermächtnis -->
+    <div class="slide">
+      <div>
+        <span class="slide-badge">Synthese & Ausblick</span>
+        <h2 class="slide-title">Das Vermächtnis: Prophet der Moderne</h2>
+        <div class="grid-3">
+          <div class="card">
+            <h4>Tiefenpsychologie</h4>
+            <p>Freud nannte die <em>Karamasows</em> den großartigsten Roman aller Zeiten; Dostojewski entdeckte die Ambivalenz des Unterbewussten lange vor der Psychoanalyse.</p>
+          </div>
+          <div class="card">
+            <h4>Existenzphilosophie</h4>
+            <p>Nietzsche bezeichnete Dostojewski als den einzigen Psychologen, von dem er etwas lernen konnte; Wegbereiter für Camus, Sartre und Kafka.</p>
+          </div>
+          <div class="card">
+            <h4>Gesellschaftsdiagnose</h4>
+            <p>Vorahnung der totalitären Utopien und die Warnung vor der Hybris eines säkularen Menschen, der sich selbst zum Gott erklären will.</p>
+          </div>
+        </div>
+        <div class="quote-box" style="margin-top: 20px;">
+          „Jeder von uns ist vor allen für alles und alle schuldig, und ich mehr als alle anderen.“
+          <div class="quote-author">— Starez Sossima in <em>Die Brüder Karamasow</em></div>
+        </div>
+      </div>
+      <div class="speaker-notes">
+        <strong>Vortragsnotiz:</strong> Fazit ziehen: Dostojewskis Werk bleibt brisant, weil er keine einfachen Trostformeln anbietet, sondern den modernen Menschen in seiner gesamten Widersprüchlichkeit, Freiheit und Tragik ernst nimmt. Diskussion eröffnen.
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <button class="nav-btn" id="prevBtn" onclick="prevSlide()">&#8592; Zurück</button>
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <span class="slide-counter" id="slideCounter">1 / 10</span>
+    <button class="nav-btn" id="nextBtn" onclick="nextSlide()">Weiter &#8594;</button>
+  </footer>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const progressBar = document.getElementById('progressBar');
+    const counter = document.getElementById('slideCounter');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    let currentIndex = 0;
+    let notesVisible = false;
+
+    function updateSlide(index) {
+      if (index < 0) index = 0;
+      if (index >= slides.length) index = slides.length - 1;
+
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === index);
+      });
+
+      currentIndex = index;
+      const progress = ((currentIndex + 1) / slides.length) * 100;
+      progressBar.style.width = `${progress}%`;
+      counter.textContent = `${currentIndex + 1} / ${slides.length}`;
+
+      prevBtn.style.opacity = currentIndex === 0 ? '0.4' : '1';
+      nextBtn.style.opacity = currentIndex === slides.length - 1 ? '0.4' : '1';
+    }
+
+    function nextSlide() {
+      if (currentIndex < slides.length - 1) {
+        updateSlide(currentIndex + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentIndex > 0) {
+        updateSlide(currentIndex - 1);
+      }
+    }
+
+    function toggleNotes() {
+      notesVisible = !notesVisible;
+      document.querySelectorAll('.speaker-notes').forEach(el => {
+        el.classList.toggle('visible', notesVisible);
+      });
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        prevSlide();
+      } else if (e.key.toLowerCase() === 'n') {
+        toggleNotes();
+      } else if (e.key.toLowerCase() === 'f') {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen();
+        } else {
+          document.exitFullscreen();
+        }
+      }
+    });
+
+    updateSlide(0);
+  </script>
+</body>
+</html>
