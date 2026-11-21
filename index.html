@@ -2,6 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="/fonts/xallace-type.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fjodor M. Dostojewski – Poetik, Tragödie und Existenzialismus</title>
   <style>
@@ -14,8 +15,8 @@
       --accent-gold: #d4af37;
       --accent-red: #c0392b;
       --accent-cyan: #4db6ac;
-      --font-serif: 'Georgia', 'Palatino Linotype', 'Times New Roman', serif;
-      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --font-serif: var(--xt-title);
+      --font-sans: var(--xt-text);
     }
 
     * {
@@ -132,6 +133,7 @@
       color: var(--text-muted);
       margin-bottom: 28px;
       font-style: italic;
+  font-family: var(--xt-sub);
     }
 
     .slide-content {
@@ -308,6 +310,7 @@
       font-size: 1.35rem;
       color: var(--accent-gold);
       margin-bottom: 24px;
+  font-family: var(--xt-sub);
     }
 
     .title-meta {
@@ -685,5 +688,6 @@
 
     updateSlide(0);
   </script>
+<script src="/fonts/xallace-type.js" defer></script>
 </body>
 </html>
